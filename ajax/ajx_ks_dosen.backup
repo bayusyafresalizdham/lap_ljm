@@ -1,0 +1,56 @@
+<?php
+error_reporting(0);
+	$periode = $_REQUEST['valuz'];
+	$jurusan = $_REQUEST['srchby'];
+	$saran = array();
+	$nama_dosen = array();
+	$kritik = array();
+	$nama_dosen1 = array();
+	include_once '../lib/Database.php';
+	$db = new Database();
+  if($jurusan != ""){
+     $res1 = $db->select("SELECT * FROM `kritik_dosen` WHERE `periode_kode` ='$periode' and `nama_dosen` ='$jurusan' ORDER BY nama_dosen");
+	   $res= $db->select("SELECT * FROM `saran_dosen` WHERE `periode_kode` = '$periode' and `nama_dosen` ='$jurusan' ORDER BY nama_dosen");
+  }else {
+    $res1 = $db->select("SELECT * FROM `kritik_dosen` WHERE `periode_kode` ='$periode' AND nama_dosen<>'' ORDER BY nama_dosen");
+    $res= $db->select("SELECT * FROM `saran_dosen` WHERE `periode_kode` = '$periode' AND nama_dosen<>'' ORDER BY nama_dosen");
+  }
+  while($row = $res->fetch_assoc()) {
+		$saran[count($saran)] = $row['saran'];
+		$nama_dosen[count($nama_dosen)] = $row['nama_dosen'];
+	}
+
+  while($row = $res1->fetch_assoc()) {
+		$kritik[count($kritik)] = $row['kritik'];
+		$nama_dosen1[count($nama_dosen1)] = $row['nama_dosen'];
+	}
+	for($i=0;$i<count($nama_dosen);$i++){
+		echo "<div>";
+		echo "<table class='table'>";
+		if($nama_dosen[$i-1]!=$nama_dosen[$i]){
+			echo "<tr style='border-top:1px solid #000;'>";
+			echo "<th colspan=8>"."Nama dosen : ". $nama_dosen[$i]."</th>";
+			echo "</tr>";
+
+  		echo "<tr>";
+  		echo "<td width=300 style='max-width:300px;width:300px;'><b>Kritik</b></td>";
+  		echo "</tr>";
+      for($j=0;$j<count($nama_dosen1);$j++){
+          if($nama_dosen[$i] == $nama_dosen1[$j]){
+
+        		echo "<tr>";
+        		echo "<td width=300 style='max-width:300px;width:300px;'>".$kritik[$j]."</td>";
+        		echo "</tr>";
+          }
+      }
+
+  		echo "<tr>";
+  		echo "<td width=300 style='max-width:300px;width:300px;'><b>Saran</b></td>";
+  		echo "</tr>";
+		}
+		echo "<tr>";
+		echo "<td width=300 style='max-width:300px;width:300px;'>".$saran[$i]."</td>";
+		echo "</tr>";
+		echo "</table>";
+	}
+?>

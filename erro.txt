@@ -1,0 +1,3 @@
+Executed SQL Statement : select * from `db_ljm`.`v_rekap_quesioner_biro` limit 0, 1000 
+Error Number : 1449 
+Error Message: The user specified as a definer ('ljm'@'%') does not exist 
